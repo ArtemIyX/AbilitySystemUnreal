@@ -102,12 +102,11 @@ public:
 	 * This function searches the effect list and returns the first instance that matches the provided
 	 * effect class. If a matching effect is found, it is returned in the `OutEffect` parameter.
 	 *
-	 * @param OutEffect A reference to store the found effect, if any.
 	 * @param EffectClass The class type of the effect to retrieve.
-	 * @return True if an effect was found, false otherwise.
+	 * @return A reference to the found effect, if any.
 	 */
-	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Effects")
-	virtual bool GetEffect(TSubclassOf<UEffect> EffectClass, UEffect*& OutEffect) const;
+	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Effects", Meta=(DeterminesOutputType="EffectClass"))
+	virtual UEffect* GetEffect(TSubclassOf<UEffect> EffectClass);
 
 	/**
 	 * @brief Retrieves an active effect from the component's effect list by its class type.
@@ -186,11 +185,10 @@ public:
 	 * and outputs it if found.
 	 *
 	 * @param AttributeClass The class of the attribute to retrieve.
-	 * @param OutAttribute The output parameter that will hold the found attribute.
-	 * @return True if the attribute was found, false otherwise.
+	 * @return A reference to the found attribute, if any.
 	 */
-	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Attributes")
-	virtual bool GetAttribute(TSubclassOf<UAttribute> AttributeClass, UAttribute*& OutAttribute) const;
+	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Attributes", Meta=(DeterminesOutputType="AttributeClass"))
+	virtual UAttribute* GetAttribute(TSubclassOf<UAttribute> AttributeClass);
 
 	/**
 	 * @brief Gets the attribute of the specified class.
@@ -226,7 +224,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Attribute")
 	virtual void GetAttributeList(TArray<UAttribute*>& OutAttributes);
-	
+
 #pragma endregion Attributes
 
 #pragma region Events

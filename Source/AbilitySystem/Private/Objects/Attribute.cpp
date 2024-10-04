@@ -37,34 +37,34 @@ UASComponent* UAttribute::GetOwningComponent() const
 	return GetOwner()->FindComponentByClass<UASComponent>();
 }
 
+float UAttribute::GetValuePercent() const
+{
+	return FMath::GetMappedRangeValueClamped(FVector2D(GetMinValue(), GetMaxValue()),
+	                                         FVector2D(0.0f, 1.0f), GetCurrentValue());
+}
+
 void UAttribute::OnAttributeListUpdated_Implementation()
 {
-	
 }
 
 void UAttribute::OnAttributeAdded_Implementation(UAttribute* AnotherAttribute)
 {
-	
 }
 
 void UAttribute::OnAttributeRemoving_Implementation(UAttribute* AnotherAttribute)
 {
-	
 }
 
 void UAttribute::OnEffectListUpdated_Implementation()
 {
-	
 }
 
 void UAttribute::OnEffectAdded_Implementation(UEffect* AnotherEffect)
 {
-	
 }
 
 void UAttribute::OnEffectRemoving_Implementation(UEffect* AnotherEffect)
 {
-	
 }
 
 void UAttribute::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -84,7 +84,6 @@ FString UAttribute::GetDebugString_Implementation() const
 
 void UAttribute::OnWorkEnded_Implementation()
 {
-	
 }
 
 void UAttribute::SetMinValue(float InValue)

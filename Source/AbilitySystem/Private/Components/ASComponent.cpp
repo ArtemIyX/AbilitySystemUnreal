@@ -56,12 +56,21 @@ bool UASComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch,
 {
 	bool sup = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	for (auto ef : Effects)
+	for (UEffect* entity : Effects)
 	{
-		if (IsValid(ef))
+		if (IsValid(entity))
 		{
-			sup |= Channel->ReplicateSubobject(ef, *Bunch, *RepFlags);
-			sup |= ef->ReplicateSubobjects(Channel, Bunch, RepFlags);
+			sup |= Channel->ReplicateSubobject(entity, *Bunch, *RepFlags);
+			sup |= entity->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
+	}
+
+	for (UAttribute* entity : Attributes)
+	{
+		if (IsValid(entity))
+		{
+			sup |= Channel->ReplicateSubobject(entity, *Bunch, *RepFlags);
+			sup |= entity->ReplicateSubobjects(Channel, Bunch, RepFlags);
 		}
 	}
 	return sup;
@@ -254,10 +263,9 @@ UEffect* UASComponent::AddEffect(TSubclassOf<UEffect> EffectClass)
 	return temp;
 }
 
-bool UASComponent::GetEffect(TSubclassOf<UEffect> EffectClass, UEffect*& OutEffect) const
+UEffect* UASComponent::GetEffect(TSubclassOf<UEffect> EffectClass)
 {
-	OutEffect = Effect(EffectClass);
-	return IsValid(OutEffect);
+	return Effect(EffectClass);
 }
 
 UEffect* UASComponent::Effect(TSubclassOf<UEffect> EffectClass) const
@@ -448,6 +456,11 @@ void UASComponent::RemoveAttributeByClass(TSubclassOf<UAttribute> AttributeClass
 	}
 }
 
+UAttribute* UASComponent::GetAttribute(TSubclassOf<UAttribute> AttributeClass)
+{
+	return Attribute(AttributeClass);
+}
+
 UAttribute* UASComponent::Attribute(TSubclassOf<UAttribute> AttributeClass) const
 {
 	// Iterate through the Effects array
@@ -463,12 +476,6 @@ UAttribute* UASComponent::Attribute(TSubclassOf<UAttribute> AttributeClass) cons
 		}
 	}
 	return nullptr;
-}
-
-bool UASComponent::GetAttribute(TSubclassOf<UAttribute> AttributeClass, UAttribute*& OutAttribute) const
-{
-	OutAttribute = Attribute(AttributeClass);
-	return IsValid(OutAttribute);
 }
 
 bool UASComponent::HasAttribute(TSubclassOf<UAttribute> AttributeClass) const

@@ -142,6 +142,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
 	UASComponent* GetOwningComponent() const;
 
+	/**
+	 * @brief Current / Max
+	 * @return Value ratio (0.0 - 1.0)
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
+	float GetValuePercent() const;
 
 	/**
 	 * @brief Gets the minimum value of the attribute.
