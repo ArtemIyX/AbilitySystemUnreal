@@ -191,5 +191,6 @@ bool UASComponent::HasEffect(TSubclassOf<UEffect> EffectClass) const
 
 void UASComponent::GetEffectList(TArray<UEffect*>& OutEffects)
 {
-	
+	OutEffects.Empty();
+	OutEffects = Effects;
 }

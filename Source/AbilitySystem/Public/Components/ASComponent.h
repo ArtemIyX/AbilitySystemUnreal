@@ -44,6 +44,7 @@ public:
 	void EffectHasEnded(UEffect* InEffect);
 
 public:
+#pragma region Effects
 	/**
 	 * @brief Removes an active effect from the component's effect list by its entity.
 	 *
@@ -128,4 +129,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Effects")
 	void GetEffectList(TArray<UEffect*>& OutEffects);
+
+#pragma endregion Effects
 };
