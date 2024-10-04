@@ -8,6 +8,7 @@
 #include "UObject/Object.h"
 #include "Effect.generated.h"
 
+class UAttribute;
 class UASComponent;
 /**
  * @class UEffect
@@ -44,6 +45,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void ObjectBeginPlay() override;
 	virtual FString GetDebugString_Implementation() const override;
+
 protected:
 	/**
 	 * @brief Manually notifies the end of the effect.
@@ -52,6 +54,43 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void EndWork();
+
+public:
+	/**
+	* @brief Called when Array of attributes has changed
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnAttributeListUpdated();
+
+	/**
+	 * @brief Called when new attribute added
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnAttributeAdded(UAttribute* AnotherAttribute);
+
+	/**
+	 * @brief Called when some attribute is being destroyed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnAttributeRemoving(UAttribute* AnotherAttribute);
+
+	/**
+	 * @brief Called when Array of effects has changed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnEffectListUpdated();
+
+	/**
+	 * @brief Called when new effect added
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnEffectAdded(UEffect* AnotherEffect);
+
+	/**
+	 * @brief Called when some effect is being destroyed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnEffectRemoving(UEffect* AnotherEffect);
 
 public:
 	/**
@@ -82,9 +121,10 @@ public:
 	 * @note Another effect will be destroyed after call
 	 *
 	 * @param AnotherEffect A pointer to the effect that should be stacked with the current one.
+	 * @return If stacked successfully true
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="Effect|Main")
-	void Stack(UEffect* AnotherEffect);
+	bool Stack(UEffect* AnotherEffect);
 
 	/**
 	 * @brief Gets Owner Component by class
@@ -102,6 +142,4 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Effect|Getters")
 	FORCEINLINE bool IsStackable() const { return bStackable; }
-
-	
 };

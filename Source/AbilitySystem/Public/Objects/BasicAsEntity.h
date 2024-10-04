@@ -39,4 +39,6 @@ public:
 	 */
 	UFUNCTION(BlueprintNativeEvent, BlueprintPure, Category="Entity")
 	FString GetDebugString() const;
+
+	
 };

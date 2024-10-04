@@ -9,6 +9,7 @@
 #include "UObject/Object.h"
 #include "Attribute.generated.h"
 
+class UEffect;
 class UASComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAttributeValueDelegate, UAttribute*, AttributePtr, float, Value);
 
@@ -88,6 +89,52 @@ protected:
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual FString GetDebugString_Implementation() const override;
+
+public:
+	/**
+	 * @brief Marks the end of the attribute's work.
+	 * 
+	 * This function is designed to be overridden in Blueprints and is called
+	 * when the attribute is being destroyed.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category="Attribute")
+	void OnWorkEnded();
+
+	/**
+ * @brief Called when Array of attributes has changed
+ */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnAttributeListUpdated();
+
+	/**
+	 * @brief Called when new attribute added
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnAttributeAdded(UAttribute* AnotherAttribute);
+
+	/**
+	 * @brief Called when some attribute is being destroyed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnAttributeRemoving(UAttribute* AnotherAttribute);
+
+	/**
+	 * @brief Called when Array of effects has changed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnEffectListUpdated();
+
+	/**
+	 * @brief Called when new effect added
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnEffectAdded(UEffect* AnotherEffect);
+
+	/**
+	 * @brief Called when some effect is being destroyed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Entity|Updates")
+	void OnEffectRemoving(UEffect* AnotherEffect);
 public:
 	/**
 	 * @brief Gets Owner Component by class
@@ -95,12 +142,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
 	UASComponent* GetOwningComponent() const;
 
-	/**
-	 * @brief Called when Array of attributes has changed
-	 */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Attribute|Updates")
-	void OnAttributeListUpdated();
-	
+
 	/**
 	 * @brief Gets the minimum value of the attribute.
 	 * @return The current minimum value.
@@ -192,6 +234,4 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
 	FAttributeValueDelegate OnValueMaxThresholdReached;
-
-
 };

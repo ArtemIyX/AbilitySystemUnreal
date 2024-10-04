@@ -32,6 +32,8 @@ void UEffect::EndWork()
 	}
 }
 
+
+
 void UEffect::StartWork_Implementation()
 {
 	// Some work here
@@ -43,11 +45,41 @@ void UEffect::OnWorkEnded_Implementation()
 }
 
 
-void UEffect::Stack_Implementation(UEffect* AnotherEffect)
+bool UEffect::Stack_Implementation(UEffect* AnotherEffect)
 {
 	/**
 	 * If bStackable -> Same effect will call Stack() 
 	 */
+	return false;
+}
+
+void UEffect::OnEffectRemoving_Implementation(UEffect* AnotherEffect)
+{
+	
+}
+
+void UEffect::OnAttributeListUpdated_Implementation()
+{
+	
+}
+
+void UEffect::OnAttributeAdded_Implementation(UAttribute* AnotherAttribute)
+{
+	
+}
+
+void UEffect::OnAttributeRemoving_Implementation(UAttribute* AnotherAttribute)
+{
+	
+}
+
+void UEffect::OnEffectListUpdated_Implementation()
+{
+}
+
+void UEffect::OnEffectAdded_Implementation(UEffect* AnotherEffect)
+{
+	
 }
 
 UASComponent* UEffect::GetOwningComponent() const

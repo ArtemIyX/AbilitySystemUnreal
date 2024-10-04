@@ -4,9 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Objects/Effects/Effect.h"
 #include "ASComponent.generated.h"
 
+
+class UAttribute;
+class UEffect;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FASComponentDelegate, UASComponent*, Component);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FASComponentAttributeDelegate, UASComponent*, Component, UAttribute*,
+                                             Entity);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FASComponentEffectDelegate, UASComponent*, Component, UEffect*, Entity);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), DisplayName="Ability System Component (Lightweight)")
 class ABILITYSYSTEM_API UASComponent : public UActorComponent
@@ -21,9 +30,15 @@ protected:
 	UPROPERTY(ReplicatedUsing=OnRep_Effects)
 	TArray<UEffect*> Effects;
 
+	UPROPERTY(ReplicatedUsing=OnRep_Attributes)
+	TArray<UAttribute*> Attributes;
+
 protected:
 	UFUNCTION()
 	virtual void OnRep_Effects();
+
+	UFUNCTION()
+	virtual void OnRep_Attributes();
 
 protected:
 
@@ -128,7 +143,135 @@ public:
 	 * @param OutEffects An array to be filled with the currently active effects.
 	 */
 	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Effects")
-	void GetEffectList(TArray<UEffect*>& OutEffects);
+	virtual void GetEffectList(TArray<UEffect*>& OutEffects);
 
 #pragma endregion Effects
+
+#pragma region Attributes
+	/**
+	 * @brief Adds a new attribute of the specified class.
+	 *
+	 * This function creates and adds an attribute of the specified type.
+	 *
+	 * @param AttributeClass The class of the attribute to add.
+	 * @return A pointer to the newly added attribute.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="AbilitySystem|Attributes")
+	virtual UAttribute* AddAttribute(TSubclassOf<UAttribute> AttributeClass);
+
+	/**
+	 * @brief Removes an attribute associated with the specified entity.
+	 *
+	 * This function removes the specified attribute from the system.
+	 *
+	 * @param InAttribute The attribute to be removed.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="AbilitySystem|Attributes")
+	virtual void RemoveAttributeByEntity(UAttribute* InAttribute);
+
+	/**
+	 * @brief Removes all attributes of a specified class.
+	 *
+	 * This function removes all attributes that are instances of the specified class.
+	 *
+	 * @param AttributeClass The class of the attributes to remove.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="AbilitySystem|Attributes")
+	virtual void RemoveAttributeByClass(TSubclassOf<UAttribute> AttributeClass);
+
+	/**
+	 * @brief Retrieves an attribute of the specified class.
+	 *
+	 * This function checks for the existence of an attribute of the specified class
+	 * and outputs it if found.
+	 *
+	 * @param AttributeClass The class of the attribute to retrieve.
+	 * @param OutAttribute The output parameter that will hold the found attribute.
+	 * @return True if the attribute was found, false otherwise.
+	 */
+	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Attributes")
+	virtual bool GetAttribute(TSubclassOf<UAttribute> AttributeClass, UAttribute*& OutAttribute) const;
+
+	/**
+	 * @brief Gets the attribute of the specified class.
+	 *
+	 * This function returns the attribute of the specified class.
+	 *
+	 * @param AttributeClass The class of the attribute to retrieve.
+	 * @return A pointer to the attribute of the specified class.
+	 */
+	virtual UAttribute* Attribute(TSubclassOf<UAttribute> AttributeClass) const;
+
+	/**
+	 * @brief Checks if an attribute of the specified class exists.
+	 *
+	 * This function checks for the presence of an attribute of the specified class.
+	 *
+	 * @param AttributeClass The class of the attribute to check.
+	 * @return True if the attribute exists, false otherwise.
+	 */
+	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Attributes")
+	virtual bool HasAttribute(TSubclassOf<UAttribute> AttributeClass) const;
+
+
+	/**
+	 * @brief Retrieves the list of all active attributes in the component.
+	 *
+	 * This function populates the provided array with all active attributes within the component.
+	 * It is intended for debugging purposes to inspect the current state of attributes.
+	 *
+	 * @note This function is intended for debugging purposes to inspect the current state of attributes.
+	 * 
+	 * @param OutAttributes An array to be filled with the currently active attributes.
+	 */
+	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Attribute")
+	virtual void GetAttributeList(TArray<UAttribute*>& OutAttributes);
+	
+#pragma endregion Attributes
+
+#pragma region Events
+
+	/**
+	 * @brief Delegate called when an effect is added.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Effects")
+	FASComponentEffectDelegate OnEffectAdded;
+
+	/**
+	 * @brief Delegate called when an effect is stacked.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Effects")
+	FASComponentEffectDelegate OnEffectStacked;
+
+	/**
+	 * @brief Delegate called when an effect is removed.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Effects")
+	FASComponentEffectDelegate OnEffectRemoved;
+
+	/**
+	 * @brief Delegate called when the effect list is updated.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Effects")
+	FASComponentDelegate OnEffectListUpdated;
+
+	/**
+	 * @brief Delegate called when an attribute is added.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Attributes")
+	FASComponentAttributeDelegate OnAttributeAdded;
+
+	/**
+	 * @brief Delegate called when an attribute is removed.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Attributes")
+	FASComponentAttributeDelegate OnAttributeRemoved;
+
+	/**
+	 * @brief Delegate called when the attribute list is updated.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="AbilitySystem|Attributes")
+	FASComponentDelegate OnAttributeListUpdated;
+
+#pragma endregion Events
 };
