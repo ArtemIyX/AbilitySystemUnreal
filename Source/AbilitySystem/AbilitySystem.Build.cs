@@ -25,7 +25,7 @@ public class AbilitySystem : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", "ReplicatedObject"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -38,6 +38,7 @@ public class AbilitySystem : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"NetCore"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
