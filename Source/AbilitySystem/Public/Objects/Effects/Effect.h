@@ -38,8 +38,36 @@ public:
 	UEffect(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 protected:
+	/**
+	* @brief Whether the effect should be stacking.
+	*
+	* If the effect is stackable, adding the same effect by class will offer to stack two objects.
+	* 
+	* @note It can be used for stacking effects like poisoning, burning.
+	*
+	* @see Stack
+	 */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Effect")
 	uint8 bStackable : 1;
+
+
+	/**
+	* @brief Stores the number of stacks of effect.
+	*
+	* If the effect is stackable, adding the same effect by class will offer to stack two objects.
+	* 
+	* @note The variable must be changed via a setter, otherwise replication will not work
+	*
+	* @see bStackable
+	* @see Stack
+	* @see SetStackableNum
+	 */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Effect", ReplicatedUsing=OnRep_StackableNum)
+	int32 StackableNum{1};
+
+protected:
+	UFUNCTION()
+	virtual void OnRep_StackableNum();
 
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -56,6 +84,12 @@ protected:
 	virtual void EndWork();
 
 public:
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Effect|Stackable")
+	virtual void SetStackableNum(int32 InValue);
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int32 GetStackableNum() const { return StackableNum; }
+
 	/**
 	* @brief Called when Array of attributes has changed
 	*/
@@ -142,4 +176,5 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Effect|Getters")
 	FORCEINLINE bool IsStackable() const { return bStackable; }
+	
 };

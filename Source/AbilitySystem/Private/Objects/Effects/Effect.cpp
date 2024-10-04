@@ -4,15 +4,25 @@
 #include "Objects/Effects/Effect.h"
 
 #include "Components/ASComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Net/Core/PushModel/PushModel.h"
 
 UEffect::UEffect(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	bStackable = false;
+	StackableNum = 1;
+}
+
+void UEffect::OnRep_StackableNum()
+{
 }
 
 void UEffect::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	FDoRepLifetimeParams Params;
+	Params.bIsPushBased = true;
+	DOREPLIFETIME_WITH_PARAMS_FAST(UEffect, StackableNum, Params);
 }
 
 void UEffect::ObjectBeginPlay()
@@ -32,6 +42,11 @@ void UEffect::EndWork()
 	}
 }
 
+void UEffect::SetStackableNum(int32 InValue)
+{
+	StackableNum = FMath::Clamp(InValue, 1, TNumericLimits<int32>::Max());
+	MARK_PROPERTY_DIRTY_FROM_NAME(UEffect, StackableNum, this);
+}
 
 
 void UEffect::StartWork_Implementation()
@@ -55,22 +70,18 @@ bool UEffect::Stack_Implementation(UEffect* AnotherEffect)
 
 void UEffect::OnEffectRemoving_Implementation(UEffect* AnotherEffect)
 {
-	
 }
 
 void UEffect::OnAttributeListUpdated_Implementation()
 {
-	
 }
 
 void UEffect::OnAttributeAdded_Implementation(UAttribute* AnotherAttribute)
 {
-	
 }
 
 void UEffect::OnAttributeRemoving_Implementation(UAttribute* AnotherAttribute)
 {
-	
 }
 
 void UEffect::OnEffectListUpdated_Implementation()
@@ -79,7 +90,6 @@ void UEffect::OnEffectListUpdated_Implementation()
 
 void UEffect::OnEffectAdded_Implementation(UEffect* AnotherEffect)
 {
-	
 }
 
 UASComponent* UEffect::GetOwningComponent() const
@@ -91,4 +101,3 @@ FString UEffect::GetDebugString_Implementation() const
 {
 	return FString::Printf(TEXT("Effect"));
 }
-

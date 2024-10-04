@@ -20,10 +20,12 @@ UASComponent::UASComponent(const FObjectInitializer& ObjectInitializer) : Super(
 
 void UASComponent::OnRep_Effects()
 {
+	OnEffectListUpdated.Broadcast(this);
 }
 
 void UASComponent::OnRep_Attributes()
 {
+	OnAttributeListUpdated.Broadcast(this);
 }
 
 // Called when the game starts
