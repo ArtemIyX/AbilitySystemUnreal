@@ -7,9 +7,13 @@
 #include "DurationEffect.generated.h"
 
 /**
- * 
+ * @class UDurationEffect
+ * @brief A class representing an effect with a defined duration.
+ *
+ * UDurationEffect is a type of effect that lasts for a specific amount of time.
+ * The effect's behavior is managed by starting a timer, and when the timer ends, the effect concludes.
  */
-UCLASS()
+UCLASS(Abstract)
 class ABILITYSYSTEM_API UDurationEffect : public UEffect
 {
 	GENERATED_BODY()
@@ -25,7 +29,6 @@ public:
 public:
 	/**
 	* @brief Starts a timer that performs an action based on the specified duration.
-	*
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	virtual void RunTimer();

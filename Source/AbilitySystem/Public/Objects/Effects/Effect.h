@@ -24,7 +24,7 @@ class UASComponent;
  * and `WorkEnded` methods, which can be implemented in Blueprints.
  * 
  */
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Abstract)
 class ABILITYSYSTEM_API UEffect : public UBasicAsEntity
 {
 	GENERATED_BODY()
