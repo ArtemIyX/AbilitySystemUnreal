@@ -21,160 +21,167 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAttributeValueDelegate, UAttribute
 UCLASS(Blueprintable, BlueprintType)
 class ABILITYSYSTEM_API UAttribute : public UAdvancedReplicatedObject
 {
-    GENERATED_BODY()
-
-protected:
-
-    /**
-     * @brief Minimum value of the attribute.
-     * 
-     * This value is replicated and is only editable in the defaults. Changes are broadcast via the OnMinValueChanged delegate.
-     */
-    UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Attribute|Defaults", ReplicatedUsing=OnRep_MinValue)
-    float MinValue;
-
-    /**
-     * @brief Maximum value of the attribute.
-     * 
-     * This value is replicated and is only editable in the defaults. Changes are broadcast via the OnMaxValueChanged delegate.
-     */
-    UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Attribute|Defaults", ReplicatedUsing=OnRep_MaxValue)
-    float MaxValue;
-
-    /**
-     * @brief Current value of the attribute.
-     * 
-     * This value is replicated and changes are broadcast via the OnValueChanged delegate.
-     */
-    UPROPERTY(BlueprintReadWrite, Category="Attribute|Current", ReplicatedUsing=OnRep_CurrentValue)
-    float CurrentValue;
-
-protected:
-
-    /**
-     * @brief Called when MinValue is replicated.
-     * 
-     * This function is automatically triggered when the MinValue is updated on the client side.
-     */
-    UFUNCTION()
-    virtual void OnRep_MinValue();
-
-    /**
-     * @brief Called when MaxValue is replicated.
-     * 
-     * This function is automatically triggered when the MaxValue is updated on the client side.
-     */
-    UFUNCTION()
-    virtual void OnRep_MaxValue();
-
-    /**
-     * @brief Called when CurrentValue is replicated.
-     * 
-     * This function is automatically triggered when the CurrentValue is updated on the client side.
-     */
-    UFUNCTION()
-    virtual void OnRep_CurrentValue();
+	GENERATED_BODY()
 
 public:
+	/**
+	 * @brief Constructs a UAttribute object.
+	 *
+	 * @param InObjectInitializer The object initializer used to initialize this object. 
+	 *                            Defaults to FObjectInitializer::Get().
+	 */
+	UAttribute(const FObjectInitializer& InObjectInitializer = FObjectInitializer::Get());
 
-    /**
-     * @brief Configures the properties to replicate.
-     * 
-     * This function is overridden to specify which properties of this class should be replicated across the network.
-     * 
-     * @param OutLifetimeProps Array to be populated with the properties to be replicated.
-     */
-    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+protected:
+	/**
+	 * @brief Minimum value of the attribute.
+	 * 
+	 * This value is replicated and is only editable in the defaults. Changes are broadcast via the OnMinValueChanged delegate.
+	 */
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Attribute|Defaults", ReplicatedUsing=OnRep_MinValue)
+	float MinValue;
 
-    /**
-     * @brief Gets the minimum value of the attribute.
-     * @return The current minimum value.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
-    FORCEINLINE float GetMinValue() const { return MinValue; }
+	/**
+	 * @brief Maximum value of the attribute.
+	 * 
+	 * This value is replicated and is only editable in the defaults. Changes are broadcast via the OnMaxValueChanged delegate.
+	 */
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Attribute|Defaults", ReplicatedUsing=OnRep_MaxValue)
+	float MaxValue;
 
-    /**
-     * @brief Gets the maximum value of the attribute.
-     * @return The current maximum value.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
-    FORCEINLINE float GetMaxValue() const { return MaxValue; }
+	/**
+	 * @brief Current value of the attribute.
+	 * 
+	 * This value is replicated and changes are broadcast via the OnValueChanged delegate.
+	 */
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Attribute|Current", ReplicatedUsing=OnRep_CurrentValue)
+	float CurrentValue;
 
-    /**
-     * @brief Gets the current value of the attribute.
-     * @return The current value.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
-    FORCEINLINE float GetCurrentValue() const { return CurrentValue; }
+protected:
+	virtual void ObjectBeginPlay() override;
+	/**
+	 * @brief Called when MinValue is replicated.
+	 * 
+	 * This function is automatically triggered when the MinValue is updated on the client side.
+	 */
+	UFUNCTION()
+	virtual void OnRep_MinValue();
 
-    /**
-     * @brief Sets the minimum value of the attribute.
-     * 
-     * Only callable on the server. Broadcasts the OnMinValueChanged delegate.
-     * 
-     * @param InValue The new minimum value to set. Defaults to 0.0f.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Attribute|Setters")
-    virtual void SetMinValue(float InValue = 0.0f);
+	/**
+	 * @brief Called when MaxValue is replicated.
+	 * 
+	 * This function is automatically triggered when the MaxValue is updated on the client side.
+	 */
+	UFUNCTION()
+	virtual void OnRep_MaxValue();
 
-    /**
-     * @brief Sets the maximum value of the attribute.
-     * 
-     * Only callable on the server. Broadcasts the OnMaxValueChanged delegate.
-     * 
-     * @param InValue The new maximum value to set. Defaults to 100.0f.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Attribute|Setters")
-    virtual void SetMaxValue(float InValue = 100.0f);
+	/**
+	 * @brief Called when CurrentValue is replicated.
+	 * 
+	 * This function is automatically triggered when the CurrentValue is updated on the client side.
+	 */
+	UFUNCTION()
+	virtual void OnRep_CurrentValue();
 
-    /**
-     * @brief Sets the current value of the attribute.
-     * 
-     * Ensures that the value is clamped between MinValue and MaxValue. Broadcasts the OnValueChanged delegate, 
-     * and triggers threshold events if the value hits MinValue or MaxValue.
-     * 
-     * @param InValue The new value to set. Defaults to 50.0f.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Attribute|Setters")
-    virtual void SetValue(float InValue = 50.0f);
+public:
+	/**
+	 * @brief Configures the properties to replicate.
+	 * 
+	 * This function is overridden to specify which properties of this class should be replicated across the network.
+	 * 
+	 * @param OutLifetimeProps Array to be populated with the properties to be replicated.
+	 */
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-    /**
-     * @brief Delegate for notifying when MinValue has changed.
-     * 
-     * This delegate is broadcast whenever the MinValue is updated.
-     */
-    UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
-    FAttributeValueDelegate OnMinValueChanged;
+	/**
+	 * @brief Gets the minimum value of the attribute.
+	 * @return The current minimum value.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
+	FORCEINLINE float GetMinValue() const { return MinValue; }
 
-    /**
-     * @brief Delegate for notifying when MaxValue has changed.
-     * 
-     * This delegate is broadcast whenever the MaxValue is updated.
-     */
-    UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
-    FAttributeValueDelegate OnMaxValueChanged;
+	/**
+	 * @brief Gets the maximum value of the attribute.
+	 * @return The current maximum value.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
+	FORCEINLINE float GetMaxValue() const { return MaxValue; }
 
-    /**
-     * @brief Delegate for notifying when CurrentValue has changed.
-     * 
-     * This delegate is broadcast whenever the CurrentValue is updated.
-     */
-    UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
-    FAttributeValueDelegate OnValueChanged;
+	/**
+	 * @brief Gets the current value of the attribute.
+	 * @return The current value.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
+	FORCEINLINE float GetCurrentValue() const { return CurrentValue; }
 
-    /**
-     * @brief Delegate for notifying when CurrentValue reaches the MinValue threshold.
-     * 
-     * This delegate is broadcast when the CurrentValue is clamped to MinValue.
-     */
-    UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
-    FAttributeValueDelegate OnValueMinThresholdReached;
+	/**
+	 * @brief Sets the minimum value of the attribute.
+	 * 
+	 * Only callable on the server. Broadcasts the OnMinValueChanged delegate.
+	 * 
+	 * @param InValue The new minimum value to set. Defaults to 0.0f.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Attribute|Setters")
+	virtual void SetMinValue(float InValue = 0.0f);
 
-    /**
-     * @brief Delegate for notifying when CurrentValue reaches the MaxValue threshold.
-     * 
-     * This delegate is broadcast when the CurrentValue is clamped to MaxValue.
-     */
-    UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
-    FAttributeValueDelegate OnValueMaxThresholdReached;
+	/**
+	 * @brief Sets the maximum value of the attribute.
+	 * 
+	 * Only callable on the server. Broadcasts the OnMaxValueChanged delegate.
+	 * 
+	 * @param InValue The new maximum value to set. Defaults to 100.0f.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Attribute|Setters")
+	virtual void SetMaxValue(float InValue = 100.0f);
+
+	/**
+	 * @brief Sets the current value of the attribute.
+	 * 
+	 * Ensures that the value is clamped between MinValue and MaxValue. Broadcasts the OnValueChanged delegate, 
+	 * and triggers threshold events if the value hits MinValue or MaxValue.
+	 * 
+	 * @param InValue The new value to set. Defaults to 50.0f.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Attribute|Setters")
+	virtual void SetValue(float InValue = 50.0f);
+
+	/**
+	 * @brief Delegate for notifying when MinValue has changed.
+	 * 
+	 * This delegate is broadcast whenever the MinValue is updated.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
+	FAttributeValueDelegate OnMinValueChanged;
+
+	/**
+	 * @brief Delegate for notifying when MaxValue has changed.
+	 * 
+	 * This delegate is broadcast whenever the MaxValue is updated.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
+	FAttributeValueDelegate OnMaxValueChanged;
+
+	/**
+	 * @brief Delegate for notifying when CurrentValue has changed.
+	 * 
+	 * This delegate is broadcast whenever the CurrentValue is updated.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
+	FAttributeValueDelegate OnValueChanged;
+
+	/**
+	 * @brief Delegate for notifying when CurrentValue reaches the MinValue threshold.
+	 * 
+	 * This delegate is broadcast when the CurrentValue is clamped to MinValue.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
+	FAttributeValueDelegate OnValueMinThresholdReached;
+
+	/**
+	 * @brief Delegate for notifying when CurrentValue reaches the MaxValue threshold.
+	 * 
+	 * This delegate is broadcast when the CurrentValue is clamped to MaxValue.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
+	FAttributeValueDelegate OnValueMaxThresholdReached;
 };

@@ -6,6 +6,16 @@
 #include "Net/UnrealNetwork.h"
 #include "Net/Core/PushModel/PushModel.h"
 
+UAttribute::UAttribute(const FObjectInitializer& InObjectInitializer): Super(InObjectInitializer),
+                                                                       MinValue(0), MaxValue(100), CurrentValue(50)
+{
+}
+
+void UAttribute::ObjectBeginPlay()
+{
+	Super::ObjectBeginPlay();
+}
+
 void UAttribute::OnRep_MinValue()
 {
 	OnMaxValueChanged.Broadcast(this, MinValue);
