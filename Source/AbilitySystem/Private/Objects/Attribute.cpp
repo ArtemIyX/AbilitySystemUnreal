@@ -3,6 +3,7 @@
 
 #include "Objects/Attribute.h"
 
+#include "Components/ASComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Net/Core/PushModel/PushModel.h"
 
@@ -29,6 +30,16 @@ void UAttribute::OnRep_MaxValue()
 void UAttribute::OnRep_CurrentValue()
 {
 	OnValueChanged.Broadcast(this, CurrentValue);
+}
+
+UASComponent* UAttribute::GetOwningComponent() const
+{
+	return GetOwner()->FindComponentByClass<UASComponent>();
+}
+
+void UAttribute::OnAttributeListUpdated_Implementation()
+{
+	// Just handle
 }
 
 void UAttribute::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -8,6 +8,7 @@
 #include "UObject/Object.h"
 #include "Attribute.generated.h"
 
+class UASComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAttributeValueDelegate, UAttribute*, AttributePtr, float, Value);
 
 /**
@@ -84,15 +85,21 @@ protected:
 	virtual void OnRep_CurrentValue();
 
 public:
-	/**
-	 * @brief Configures the properties to replicate.
-	 * 
-	 * This function is overridden to specify which properties of this class should be replicated across the network.
-	 * 
-	 * @param OutLifetimeProps Array to be populated with the properties to be replicated.
-	 */
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual bool IsSupportedForNetworking() const override { return true; }
+public:
+	/**
+	 * @brief Gets Owner Component by class
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Attribute|Getters")
+	UASComponent* GetOwningComponent() const;
 
+	/**
+	 * @brief Called when Array of attributes has changed
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Attribute|Updates")
+	void OnAttributeListUpdated();
+	
 	/**
 	 * @brief Gets the minimum value of the attribute.
 	 * @return The current minimum value.
