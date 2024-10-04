@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Data/AdvancedReplicatedObject.h"
+#include "Objects/BasicAsEntity.h"
 #include "UObject/Object.h"
 #include "Effect.generated.h"
 
@@ -23,7 +24,7 @@ class UASComponent;
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class ABILITYSYSTEM_API UEffect : public UAdvancedReplicatedObject
+class ABILITYSYSTEM_API UEffect : public UBasicAsEntity
 {
 	GENERATED_BODY()
 
@@ -41,9 +42,8 @@ protected:
 
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual bool IsSupportedForNetworking() const override { return true; }
 	virtual void ObjectBeginPlay() override;
-
+	virtual FString GetDebugString_Implementation() const override;
 protected:
 	/**
 	 * @brief Manually notifies the end of the effect.
@@ -51,7 +51,7 @@ protected:
 	 * This function must be called to remove the effect from the system.
 	 */
 	UFUNCTION(BlueprintCallable)
-	void EndWork();
+	virtual void EndWork();
 
 public:
 	/**
@@ -90,7 +90,7 @@ public:
 	 * @brief Gets Owner Component by class
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Effect|Getters")
-	UASComponent* GetOwningComponent() const;
+	virtual UASComponent* GetOwningComponent() const;
 
 	/**
 	 * @brief Checks if the effect is stackable.
@@ -102,4 +102,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Effect|Getters")
 	FORCEINLINE bool IsStackable() const { return bStackable; }
+
+	
 };

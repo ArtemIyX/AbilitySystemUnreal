@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BasicAsEntity.h"
 #include "Data/AdvancedReplicatedObject.h"
 
 #include "UObject/Object.h"
@@ -20,7 +21,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAttributeValueDelegate, UAttribute
  * network synchronization. It also includes delegate events to notify listeners when the attribute values change.
  */
 UCLASS(Blueprintable, BlueprintType)
-class ABILITYSYSTEM_API UAttribute : public UAdvancedReplicatedObject
+class ABILITYSYSTEM_API UAttribute : public UBasicAsEntity
 {
 	GENERATED_BODY()
 
@@ -86,7 +87,7 @@ protected:
 
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual bool IsSupportedForNetworking() const override { return true; }
+	virtual FString GetDebugString_Implementation() const override;
 public:
 	/**
 	 * @brief Gets Owner Component by class
@@ -191,4 +192,6 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category="Attribute|Events")
 	FAttributeValueDelegate OnValueMaxThresholdReached;
+
+
 };

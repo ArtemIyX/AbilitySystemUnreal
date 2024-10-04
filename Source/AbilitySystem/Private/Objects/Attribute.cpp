@@ -52,6 +52,11 @@ void UAttribute::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME_WITH_PARAMS_FAST(UAttribute, CurrentValue, Params);
 }
 
+FString UAttribute::GetDebugString_Implementation() const
+{
+	return FString::Printf(TEXT("Attribute"));
+}
+
 void UAttribute::SetMinValue(float InValue)
 {
 	MinValue = InValue;

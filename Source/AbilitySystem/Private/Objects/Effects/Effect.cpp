@@ -54,3 +54,9 @@ UASComponent* UEffect::GetOwningComponent() const
 {
 	return GetOwner()->FindComponentByClass<UASComponent>();
 }
+
+FString UEffect::GetDebugString_Implementation() const
+{
+	return FString::Printf(TEXT("Effect"));
+}
+

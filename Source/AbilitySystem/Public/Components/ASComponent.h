@@ -115,4 +115,17 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Effects")
 	virtual bool HasEffect(TSubclassOf<UEffect> EffectClass) const;
+
+	/**
+	 * @brief Retrieves the list of all active effects in the component.
+	 *
+	 * This function populates the provided array with all active effects within the component.
+	 * It is intended for debugging purposes to inspect the current state of effects.
+	 *
+	 * @note This function is intended for debugging purposes to inspect the current state of effects.
+	 * 
+	 * @param OutEffects An array to be filled with the currently active effects.
+	 */
+	UFUNCTION(BlueprintCallable, Category="AbilitySystem|Effects")
+	void GetEffectList(TArray<UEffect*>& OutEffects);
 };

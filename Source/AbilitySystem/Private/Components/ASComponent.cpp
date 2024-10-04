@@ -188,3 +188,8 @@ bool UASComponent::HasEffect(TSubclassOf<UEffect> EffectClass) const
 	UEffect* ef = Effect(EffectClass);
 	return IsValid(ef);
 }
+
+void UASComponent::GetEffectList(TArray<UEffect*>& OutEffects)
+{
+	
+}
