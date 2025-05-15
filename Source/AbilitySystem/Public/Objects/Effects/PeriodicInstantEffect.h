@@ -24,6 +24,12 @@ protected:
 	virtual void RunPeriodicTimer();
 
 	/**
+	* @brief Clears a timer that performs an periodic tick action
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	virtual void ClearPeriodicTimer();
+	
+	/**
 	 * @brief Called periodically
 	 *
 	 * The `PeriodTick` function is executed at regular intervals while the effect is active. It allows the developer
@@ -36,7 +42,8 @@ public:
 
 	virtual void StartWork_Implementation() override;
 	virtual FString GetDebugString_Implementation() const override;
-
+	virtual void EndWork() override;
+	
 	/**
 	* @brief The period of the side effect in seconds.
 	*

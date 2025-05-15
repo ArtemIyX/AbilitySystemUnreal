@@ -17,6 +17,13 @@ void UPeriodicInstantEffect::RunPeriodicTimer()
 	                 FMath::IsNearlyZero(Period) ? 0.1f : Period, true);
 }
 
+void UPeriodicInstantEffect::ClearPeriodicTimer()
+{
+	FTimerManager& manager = GetWorld()->GetTimerManager();
+	if (manager.IsTimerActive(PeriodicTimerHandle))
+		manager.ClearTimer(PeriodicTimerHandle);
+}
+
 void UPeriodicInstantEffect::StartWork_Implementation()
 {
 	Super::StartWork_Implementation();
@@ -26,6 +33,12 @@ void UPeriodicInstantEffect::StartWork_Implementation()
 FString UPeriodicInstantEffect::GetDebugString_Implementation() const
 {
 	return FString(TEXT("PeriodicInstantEffect"));
+}
+
+void UPeriodicInstantEffect::EndWork()
+{
+	ClearPeriodicTimer();
+	Super::EndWork();
 }
 
 void UPeriodicInstantEffect::PeriodTick_Implementation()
