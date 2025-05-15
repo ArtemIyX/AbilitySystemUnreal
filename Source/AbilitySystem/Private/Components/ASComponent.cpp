@@ -440,15 +440,16 @@ void UASComponent::RemoveAttributeByClass(TSubclassOf<UAttribute> AttributeClass
 			MARK_PROPERTY_DIRTY_FROM_NAME(UASComponent, Attributes, this);
 
 			{
-				for (int32 j = 0; j < Effects.Num(); ++j)
-				{
-					Effects[j]->OnAttributeListUpdated();
-				}
-
 				for (int32 j = 0; j < Attributes.Num(); ++j)
 				{
 					Attributes[j]->OnAttributeListUpdated();
 				}
+				
+				for (int32 j = 0; j < Effects.Num(); ++j)
+				{
+					Effects[j]->OnAttributeListUpdated();
+				}
+				
 				OnAttributeListUpdated.Broadcast(this);
 			}
 			return;
@@ -467,12 +468,12 @@ UAttribute* UASComponent::Attribute(TSubclassOf<UAttribute> AttributeClass) cons
 	const int32 n = Attributes.Num();
 	for (int32 i = 0; i < n; ++i)
 	{
-		UAttribute* ef = Attributes[i];
+		UAttribute* attribute = Attributes[i];
 
 		// Check if the Effect's class matches the provided EffectClass
-		if (IsValid(ef) && ef->IsA(AttributeClass))
+		if (IsValid(attribute) && attribute->IsA(AttributeClass))
 		{
-			return ef;
+			return attribute;
 		}
 	}
 	return nullptr;
