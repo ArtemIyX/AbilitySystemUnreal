@@ -13,6 +13,8 @@
  * UPeriodicEffect inherits from UDurationEffect and introduces functionality for applying an effect repeatedly at 
  * specific intervals during its active duration. This class is useful for effects that need to trigger periodically, 
  * such as healing over time or periodic damage, while adhering to the overall duration of the effect.
+ *
+* @note Duration (will be removed after time)
  */
 UCLASS(Abstract)
 class ABILITYSYSTEM_API UPeriodicEffect : public UDurationEffect
@@ -28,6 +30,11 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	virtual void RunPeriodicTimer();
 
+	/**
+	* @brief Clears a timer that performs an periodic tick action
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	virtual void ClearPeriodicTimer();
 	/**
 	 * @brief Called periodically during the effect's active duration.
 	 *

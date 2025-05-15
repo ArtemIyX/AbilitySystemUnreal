@@ -16,6 +16,13 @@ void UPeriodicEffect::RunPeriodicTimer()
 	                 FMath::IsNearlyZero(Period) ? 0.1f : Period, true);
 }
 
+void UPeriodicEffect::ClearPeriodicTimer()
+{
+	FTimerManager& manager = GetWorld()->GetTimerManager();
+	if (manager.IsTimerActive(PeriodicTimerHandle))
+		manager.ClearTimer(PeriodicTimerHandle);
+}
+
 void UPeriodicEffect::StartWork_Implementation()
 {
 	Super::StartWork_Implementation();
@@ -25,9 +32,7 @@ void UPeriodicEffect::StartWork_Implementation()
 void UPeriodicEffect::OnWorkEnded_Implementation()
 {
 	Super::OnWorkEnded_Implementation();
-	FTimerManager& manager = GetWorld()->GetTimerManager();
-	if (manager.IsTimerActive(PeriodicTimerHandle))
-		manager.ClearTimer(PeriodicTimerHandle);
+	ClearPeriodicTimer();
 }
 
 void UPeriodicEffect::PeriodTick_Implementation()

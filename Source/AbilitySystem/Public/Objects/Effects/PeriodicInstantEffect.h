@@ -7,7 +7,10 @@
 #include "PeriodicInstantEffect.generated.h"
 
 /**
- * 
+ * @class UPeriodicInstantEffect
+ * @brief A class representing an effect with Ticking action
+ *
+* @note Instant (you should remove it by hand)
  */
 UCLASS(Abstract)
 class ABILITYSYSTEM_API UPeriodicInstantEffect : public UEffect
